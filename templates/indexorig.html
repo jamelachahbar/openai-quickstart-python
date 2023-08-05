@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Chat App</title>
+    <style>
+        /* Add the Bing chat CSS here */
+        .answer {
+            background-color: #f2f2f2;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <div class="header">
+            <h3>Chat App</h3>
+            <button id="close-sidebar">&times;</button>
+        </div>
+        <div class="answer-box"></div>
+        <form id="chat-form">
+            <label for="message">Message:</label>
+            <input type="text" id="message" name="message" placeholder="Type your message here...">
+            <input type="submit" value="Send">
+        </form>
+    </div>
+    <div id="chat-icon">&#128172;</div>
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const messageInput = document.getElementById('message');
+        const answerBox = document.querySelector('.answer-box');
+        const chatIcon = document.getElementById('chat-icon');
+        const sidebar = document.getElementById('sidebar');
+        const closeSidebar = document.getElementById('close-sidebar');
+
+        chatIcon.addEventListener('click', () => {
+            sidebar.classList.add('active');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+        });
+
+        chatForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const message = messageInput.value;
+            if (message.trim() === '') {
+                return;
+            }
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ question: message })
+            });
+            const { answers } = await response.json();
+            answers.forEach(answer => {
+                const div = document.createElement('div');
+                div.classList.add('answer');
+                div.textContent = answer;
+                answerBox.appendChild(div);
+            });
+            messageInput.value = '';
+        });
+    </script>
+</body>
+</html>

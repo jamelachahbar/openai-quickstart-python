@@ -1,0 +1,190 @@
+NTT -> un pas vers le cloud.
+started already with NTT
+
+commence a nous initié et faire rentrer dans le bain.
+
+forte probabilité que cela soit dans Azure
+
+deja MS365
+
+le projet n'avance pas beaucoup, on est à l'orteil.
+
+Du coté de Etnic, 
+souscription Enterprise Agreement dans Azure
+
+1er temps du test de la formation dans toute les branche
+
+DB-> postgres beacoup mssql
+
+plateforme d'hébéergement Web: Web App et kubernetes en interne
+
+
+un projet qui a débuté dans Azure.
+
+
+Le but serait de reconsolider tout cela et d'avoir une gestion centralise.
+
+
+
+
+
+1ere objectif: une structure organisationelle permettant au dept une liberter dans la cre&tion tout en restant contraint a des regles de l'enterprise.
+
+Il y aura uns refacturation a faire -> chargeback
+
+Tout ce qui est fait sera fait dans l'equipe de Stephane
+
+
+---------------
+
+une série de best practice orientée grande enterprise
+
+
+stephane: 1,5 chez etnic, etait chez NSI dans l'équipe cloud, solution architect AWS. Jamais vraiment travailler dedant. Concepte cloud, pas de probléme.
+ici on as une organisation très large, règle 
+
+
+
+avoir un depart propre, faire une landing zone correcte.
+
+
+
+
+Azure: a lheure actuel que du test, c'est une facilité.
+
+
+
+On est vraiment au point zero de la mise en production.
+
+Il y a une grande demande derrière.
+
+On ne veut pas perdre trop de temps pour la mise en place de la structure de départ.
+
+
+Dans l'équipe actuellement Stephane est le seul.
+
+
+plusieurs personne vont se greffer à ce projet.
+
+
+Stephane ne vient pas avec le passé, sans rancune.
+
+
+
+SAP workload known but no immediate plan to migrate, could be interesting.
+
+
+
+landing zone:
+
+Hybrid connectivité: integration of the network team.
+in the beginning cloud native.
+
+Security: not part of the discussion.
+
+
+NET IQ for identity.
+Self service portal.
+IAM is cloud agnostic, for all human accounts.
+
+Stéphane has adm account and another account.
+
+-----------------
+
+Stéphane only cloud contact
+
+
+Ansible: configuration management
+
+
+MACC: 3 ans
+
+--------
+Greenfield landing zone
+
+-----------------------------------------------
+
+Etnic, departement technique federation wallonie
+client c'est les bénéficiere: ONE (gros morceau) ils en avait marre d'attendre etnic, ils ont leur propre tenant qu'ils gères via des société externe, Federation Wallonie, Enseignement
+
+13000 utilisateurs hors enseignement
+
+
+-------------------
+
+Volonté de L'ONE est de se rattacher à l'ETNIC -> on préfer les laisser et attendre après avoir gagner une maturité.
+
+
+ETNIC: represeante 600 personne: on est les pilotes.
+
+
+-----------------------
+
+
+autres beneficiaires: cabinet ministerielles: vives 4 ans et apres tout est effacer. (deja une infra en place, on en tient pas compte) actuellement: environnement on prem avec AD et exchange dédié. -> pour le future. on en parlera pas avant l'année prochaine.
+
+
+--------------------------
+
+
+notions SILO chez Etnic.
+
+
+Stephane et son collegue essayes de nouer les liens et les équipes. Ils essayent de creer un groupe de travail.
+
+
+----------------------------
+sécurité: region européenne.
+enormement d'appli s'authentifie via l'IAM
+
+No aad sync -> everything redirected to NETIQ (risk if no connection to NETIQ, no authentication).
+-------------------------
+
+
+
+équipe de sécurité:
+mantra sécurité: agnostique, ADN est d'être agnostique.
+
+équipe de réseau:
+Network: 300 sites distants, pas vraiment de topologie, problème de compétence.
+IPAM -> on met cela en place que maintenant.
+Scope IP des serveurs: /22 (800 serveurs)
+-------------------------
+landing zone
+finops
+-------------------------
+Priorite: sources d'info best practice, pour apprendre.
+AZ-104
+-------------------------
+-------------------------
+
+
+
+Jeudi -> Au prochaine
+----------------------------
+
+Introduction CAF
+landing zone workshop
+DEMO
+
+
+
+For an engagement 2 day
+10h
+
+
+
+9h-11h
+---------------------------
+
+
+
+
+
+
+
+
+
+
+
+

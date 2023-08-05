@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Chat App</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            padding-top: 50px;
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 350px;
+            height: 100%;
+            background-color: #f5f5f5;
+            color: #333;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #sidebar.active {
+            right: 0;
+            left: auto;
+        }
+
+        #sidebar .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #fff;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #sidebar .header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        #sidebar .header button {
+            background-color: transparent;
+            border: none;
+            color: #333;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        #chat-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        #sidebar.active ~ #chat-icon {
+            display: none;
+        }
+
+        #chat-form {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            height: 100%;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #chat-form label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        #chat-form input[type="text"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 20px;
+            border: none;
+            background-color: #fff;
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #chat-form input[type="submit"] {
+            padding: 10px;
+            background-color: #0078d7;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #chat-form .answer-box {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff;
+            color: #333;
+            border-radius: 20px;
+            height: calc(100% - 70px);
+            overflow-y: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .answer, .question {
+            background-color: #f2f2f2;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 20px;
+        }
+
+        .question {
+            align-self: flex-end;
+            background-color: #0078d7;
+            color: #fff;
+        }
+
+        .answer {
+            align-self: flex-start;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        .answer-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="snap-center">
+        <h1>My Chat App</h1>
+    </div>
+    <div id="sidebar">
+        <div class="header">
+            <h3>Chat App</h3>
+            <button id="close-sidebar">&times;</button>
+        </div>
+        <form id="chat-form">
+            <label for="message">Message:</label>
+            <input type="text" id="message" name="message" placeholder="Type your question here...">
+            <input type="submit" value="Send">
+            <div class="answer-box"></div>
+        </form>
+    </div>
+    <img id="chat-icon" src="./static/bluechatrobot.png" alt="Chat Icon" width="50" height="50">
+    <span>Click to chat with me</span>
+    </div>
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const messageInput = document.getElementById('message');
+        const answerBox = document.querySelector('.answer-box');
+        const chatIcon = document.getElementById('chat-icon');
+        const sidebar = document.getElementById('sidebar');
+        const closeSidebar = document.getElementById('close-sidebar');
+
+        chatIcon.addEventListener('click', () => {
+            sidebar.classList.add('active');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+        });
+
+        chatForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const message = messageInput.value;
+            if (message.trim() === '') {
+                return;
+            }
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+            questionDiv.textContent = message;
+            answerBox.appendChild(questionDiv);
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ question: message })
+            });
+            const data = await response.json();
+            const answers = Array.isArray(data.answers) ? data.answers : [data.answers];
+            answers.forEach(answer => {
+                const div = document.createElement('div');
+                div.classList.add('answer');
+                div.textContent = answer;
+                answerBox.appendChild(div);
+            });
+            messageInput.value = '';
+            answerBox.scrollTop = answerBox.scrollHeight;
+        });
+    </script>
+</body>
+</html>

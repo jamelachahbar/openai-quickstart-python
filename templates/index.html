@@ -1,21 +1,181 @@
 <!DOCTYPE html>
+<html>
 <head>
-  <title>OpenAI Quickstart</title>
-  <link
-    rel="shortcut icon"
-    href="{{ url_for('static', filename='dog.png') }}"
-  />
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
-</head>
+    <title>My Chat App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
 
+        #chat-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 90%;
+            width: 90%;
+            /* max-width: 800px; */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #chat-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        #chat-form input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #dcdcdc;
+            background-color: #fff;
+            font-size: 16px;
+            height: 50px;
+            box-sizing: border-box;
+            box-shadow: none;
+        }
+
+        #chat-form input[type="submit"] {
+            padding: 10px;
+            background-color: #0078d7;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80px;
+        }
+
+        #clear-chat {
+            padding: 10px;
+            background-color: #f44336; /* Red */
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 50px;
+        }
+
+        .answer-box {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .answer, .question {
+            display: flex;
+            align-items: flex-end;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 20px;
+            max-width: 80%;
+        }
+
+        .question {
+            flex-direction: row-reverse;
+            align-self: flex-end;
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #dcdcdc;
+        }
+
+        .answer {
+            align-self: flex-start;
+            background-color: #f2f2f2;
+            color: #333;
+            border: 1px solid #dcdcdc;
+        }
+
+        .question .icon, .answer .icon {
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+    </style>
+</head>
 <body>
-  <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
-  <h3>Name my pet</h3>
-  <form action="/" method="post">
-    <input type="text" name="animal" placeholder="Enter an animal" required />
-    <input type="submit" value="Generate names" />
-  </form>
-  {% if result %}
-  <div class="result">{{ result }}</div>
-  {% endif %}
+    <div id="chat-container">
+        <div class="answer-box"></div>
+        <form id="chat-form">
+            <button id="clear-chat" type="button"><i class="fa fa-trash-o"></i></button>
+            <input type="text" id="message" name="message" placeholder="Type your question here...">
+            <input type="submit" value="Send">
+        </form>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const messageInput = document.getElementById('message');
+        const answerBox = document.querySelector('.answer-box');
+        const clearChatButton = document.getElementById('clear-chat');
+
+        chatForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const message = messageInput.value;
+            if (message.trim() === '') {
+                return;
+            }
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+            const questionText = document.createElement('span');
+            questionText.textContent = message;
+            const questionIcon = document.createElement('img');
+            questionIcon.src = './static/user-icon.png'; // replace with the path to your user icon
+            questionIcon.alt = 'User Icon';
+            questionIcon.classList.add('icon');
+            questionDiv.appendChild(questionIcon);
+            questionDiv.appendChild(questionText);
+            answerBox.appendChild(questionDiv);
+
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ question: message })
+            });
+            const data = await response.json();
+            const answers = Array.isArray(data.answers) ? data.answers : [data.answers];
+            answers.forEach(answer => {
+                setTimeout(() => {
+                    const answerDiv = document.createElement('div');
+                    answerDiv.classList.add('answer');
+                    const answerText = document.createElement('span');
+                    answerText.textContent = answer;
+                    const answerIcon = document.createElement('img');
+                    answerIcon.src = './static/bluechatrobot.png'; // replace with the path to your chatbot icon
+                    answerIcon.alt = 'Chatbot Icon';
+                    answerIcon.classList.add('icon');
+                    answerDiv.appendChild(answerIcon);
+                    answerDiv.appendChild(answerText);
+                    answerBox.appendChild(answerDiv);
+                    answerBox.scrollTop = answerBox.scrollHeight;
+                }, 2000);  // Delay for 2 seconds
+            });
+            messageInput.value = '';
+        });
+
+        clearChatButton.addEventListener('click', () => {
+            answerBox.innerHTML = '';
+        });
+    </script>
 </body>
+</html>
