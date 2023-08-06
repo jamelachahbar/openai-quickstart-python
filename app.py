@@ -14,8 +14,8 @@ from flask_caching import Cache
 app = Flask(__name__)
 
 # Set OpenAI API key
-os.environ["OPENAI_API_KEY"] = "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"
-OPENAI_API_KEY = "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"
+os.environ["OPENAI_API_KEY"] = ""
+OPENAI_API_KEY = ""
 
 # Download NLTK data
 nltk.download('averaged_perceptron_tagger')
